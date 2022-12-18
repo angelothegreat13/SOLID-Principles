@@ -40,3 +40,21 @@ class ChildClass extends ParentClass {
         // return $id; - violates the LSP rule 2 (Child function return return type must match parent function return type )
     }
 }
+
+// pre-conditions and post-conditions example
+function addFive($number)
+{   
+    // pre-conditions
+    if (!is_integer($number)) {
+        throw new \Exception;
+    }
+
+    $total = $number + 5;
+
+    // post-conditions
+    if (!is_integer($total)) {
+        throw new \Exception;
+    }
+
+    return $total;
+}

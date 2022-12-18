@@ -11,41 +11,132 @@
 */
 
 
+/* 
 // Incorrect Implementation
 class Square {
-    public $height;
-    public $width;
+    public $side;
 
+    public function __construct($side)
+    {
+        $this->side = $side;
+    }
 }
 
 class Circle {
     public $radius;
+
+    public function __construct($radius)
+    {
+        $this->radius = $radius;
+    }
 }
 
 class Triangle {
     public $base;
     public $height;
+
+    public function __construct($base, $height)
+    {
+        $this->base = $base;
+        $this->height = $height;
+    }
 }
 
 class AreaCalculator {
 
     public function calculate($shapes)
     {
-        $area = [];
+        $totalArea = [];
         
         foreach ($shapes as $shape) 
         {
             if (is_a($shape, 'Square')) {
-                $area[] = $shape->width * $shape->height;
+                $totalArea[] = $shape->side * $shape->side;
             }
             else if (is_a($shape, 'Circle')) {
-                $area[] = pi() * ($shape->radius * $shape->radius);
+                $totalArea[] = pi() * ($shape->radius * $shape->radius);
             }
             else if (is_a($shape, 'Triangle')) {
-                $area[] = ($shape->height * $shape->base) / 2;
+                $totalArea[] = ($shape->height * $shape->base) / 2;
             }
         }
 
-        return array_sum($area);
+        return array_sum($totalArea);
     }
 }
+
+$shapes = [];
+$shapes[] = new Square(10);
+$areaCalculator = new AreaCalculator;
+echo $areaCalculator->calculate($shapes);
+
+*/
+
+interface Shape {
+    public function getArea();
+}
+
+class Square implements Shape {
+    protected $side;
+
+    public function __construct($side)
+    {
+        $this->side = $side;
+    }
+
+    public function getArea()
+    {
+        return $this->side * $this->side;
+    }
+}
+
+class Circle implements Shape {
+    protected $radius;
+
+    public function __construct($radius)
+    {
+        $this->radius = $radius;
+    }
+
+    public function getArea()
+    {
+        return pi() * ($this->radius * $this->radius);
+    }
+}
+
+class Triangle implements Shape {
+    protected $base;
+    protected $height;
+    
+    public function __construct($base, $height)
+    {
+        $this->base = $base;
+        $this->height = $height;
+    }
+
+    public function getArea()
+    {
+        return ($this->base * $this->height) / 2;
+    }
+}
+
+class AreaCalculator {
+
+    public function calculate($shapes)
+    {
+        $totalArea = [];
+
+        foreach ($shapes as $shape) {
+            $totalArea[] = $shape->getArea();
+        }
+
+        return array_sum($totalArea);
+    }
+}
+
+$shapes = [];
+$shapes[] = new Circle(8);
+$shapes[] = new Square(10);
+$shapes[] = new Triangle(5,15);
+$areaCalculator = new AreaCalculator;
+echo $areaCalculator->calculate($shapes);
